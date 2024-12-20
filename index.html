@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人介绍</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, 
+                #1a1a1a 0%,
+                #2d3436 50%,
+                #2d3436 51%,
+                #1a1a1a 100%) fixed;
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: "Microsoft YaHei", sans-serif;
+            color: white;
+            padding: 0;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 25%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 25%),
+                linear-gradient(45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%);
+            background-size: 100% 100%, 100% 100%, 4px 4px, 4px 4px;
+            animation: shimmer 15s ease-in-out infinite alternate;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1.2) rotate(10deg);
+                opacity: 0.8;
+            }
+        }
+
+        .profile-container {
+            position: relative;
+            z-index: 1;
+            padding: 40px 20px;
+            flex: 1;
+            width: 100%;
+            box-sizing: border-box;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .profile-section {
+            width: 100%;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.2),
+                0 0 20px rgba(255, 255, 255, 0.05) inset;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .profile-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03));
+            border-radius: 0 20px 0 100%;
+        }
+
+        .profile-header {
+            width: 100%;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: rotateGradient 15s linear infinite;
+        }
+
+        @keyframes rotateGradient {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .profile-section:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: rgba(255, 255, 255, 0.09);
+        }
+
+        .profile-section:last-child {
+            grid-column: 1 / -1;
+        }
+
+        .profile-section::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.05), 
+                rgba(255, 255, 255, 0.1), 
+                rgba(255, 255, 255, 0.05));
+            z-index: -1;
+            border-radius: 22px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: borderGlow 2s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% {
+                opacity: 0.5;
+                transform: rotate(0deg);
+            }
+            100% {
+                opacity: 1;
+                transform: rotate(360deg);
+            }
+        }
+
+        .profile-header h1 {
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: #e0e0e0;
+        }
+
+        .profile-section h2 {
+            color: #a8e6cf;
+            font-size: 1.6em;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(168, 230, 207, 0.3);
+        }
+
+        .profile-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, #8eb5d0, transparent);
+        }
+
+        .profile-section p {
+            color: #e0e0e0;
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin: 20px 0;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .profile-section p:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 为每个段落设置不同的动画延迟 */
+        .profile-section p:nth-child(1) { animation-delay: 0.1s; }
+        .profile-section p:nth-child(2) { animation-delay: 0.2s; }
+        .profile-section p:nth-child(3) { animation-delay: 0.3s; }
+
+        .interests-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 10px 0;
+        }
+
+        .interest-tag {
+            background: rgba(168, 230, 207, 0.1);
+            color: #d0e0e9;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(168, 230, 207, 0.2);
+        }
+
+        .interest-tag:hover {
+            background: rgba(168, 230, 207, 0.2);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .corner-decor {
+            position: absolute;
+            font-size: 24px;
+            animation: decorFloat 2s ease-in-out infinite;
+        }
+
+        .corner-decor.top-left { top: 10px; left: 10px; }
+        .corner-decor.top-right { top: 10px; right: 10px; }
+        .corner-decor.bottom-left { bottom: 10px; left: 10px; }
+        .corner-decor.bottom-right { bottom: 10px; right: 10px; }
+
+        @keyframes decorFloat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* 动端适配 */
+        @media screen and (max-width: 768px) {
+            .profile-container {
+                padding: 10px;
+            }
+            
+            .profile-section {
+                padding: 15px;
+                margin-bottom: 0;
+            }
+
+            .profile-header {
+                padding: 15px;
+                margin-bottom: 10px;
+            }
+
+            .profile-header h1 {
+                font-size: 2em;
+            }
+
+            .profile-section h2 {
+                font-size: 1.5em;
+                margin-bottom: 10px;
+            }
+
+            .profile-section p {
+                font-size: 1em;
+                line-height: 1.6;
+            }
+
+            .interests-list {
+                gap: 8px;
+            }
+
+            .interest-tag {
+                padding: 6px 12px;
+                font-size: 0.85em;
+            }
+
+            .scroll-indicator {
+                bottom: 15px;
+                font-size: 20px;
+            }
+
+            .profile-card {
+                gap: 10px;
+            }
+
+            .profile-section p {
+                word-break: break-word;
+                overflow-wrap: break-word;
+            }
+        }
+
+        /* 添加小屏幕适配 */
+        @media screen and (max-width: 320px) {
+            .profile-header h1 {
+                font-size: 1.8em;
+            }
+
+            .profile-section h2 {
+                font-size: 1.3em;
+            }
+
+            .profile-section p {
+                font-size: 0.95em;
+            }
+
+            .interest-tag {
+                padding: 5px 10px;
+                font-size: 0.8em;
+            }
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            animation: pulse 2s infinite;
+            text-align: center;
+            max-width: 150px;
+            line-height: 1.4;
+        }
+
+        .scroll-arrows {
+            position: relative;
+            width: 20px;
+            height: 40px;
+        }
+
+        .scroll-arrows span {
+            position: absolute;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.8);
+            border-right: 2px solid rgba(255, 255, 255, 0.8);
+            transform: translate(-50%, -50%) rotate(45deg);
+            animation: scrollArrow 2s infinite;
+            opacity: 0;
+        }
+
+        .scroll-arrows span:nth-child(1) {
+            top: 0;
+            animation-delay: 0s;
+        }
+
+        .scroll-arrows span:nth-child(2) {
+            top: 10px;
+            animation-delay: 0.2s;
+        }
+
+        .scroll-arrows span:nth-child(3) {
+            top: 20px;
+            animation-delay: 0.4s;
+        }
+
+        @keyframes scrollArrow {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) rotate(45deg) translate(0, 0);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) rotate(45deg) translate(20px, 20px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* 在滚动时隐藏指示器 */
+        .scroll-indicator.hidden {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+            pointer-events: none;
+        }
+
+        /* 悬浮效果 */
+        .scroll-indicator:hover .scroll-text {
+            color: #fff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        .scroll-indicator:hover .scroll-arrows span {
+            border-color: #fff;
+            animation-duration: 1.5s;
+        }
+
+        /* 调整移动端样式 */
+        @media screen and (max-width: 768px) {
+            .scroll-text {
+                font-size: 12px;
+                max-width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <h1>个人介绍</h1>
+            </div>
+
+            <div class="profile-section">
+                <h2>基本信息</h2>
+                <p>昵称：低调哥（人称宇宙低调第一人）</p>
+                <p>坐标：化州独立自治区（宇宙最低调城市）</p>
+                <p>个性签名：以谦和之心，行稳健之路（顺便统治银河系）</p>
+            </div>
+
+            <div class="profile-section">
+                <h2>个人特点</h2>
+                <p>低调到连自己影子��害羞的绝世高手（其实是宇宙武道会隐藏BOSS）</p>
+                <p>能把谦虚发挥到极致的生活艺术家（顺便统治了三千平行宇宙）</p>
+                <p>低调得像一颗被周围星星衬托的太阳（实际上是黑洞总指挥）</p>
+                <p>未来的巅峰第一，宇宙级别首发选手（但依然保持着低调的本色）</p>
+            </div>
+
+            <div class="profile-section">
+                <h2>处世之道</h2>
+                <p>明明可以靠颜值统治宇宙，偏偏要靠实力拯救银河系</p>
+                <p>低调如我，高调做事，让成就替我张扬（顺便收藏了几个星系）</p>
+                <p>低调到连成功都要偷偷地来，连掌声都要用黑洞吸收掉</p>
+            </div>
+
+            <div class="profile-section">
+                <h2>人生愿景</h2>
+                <p>立志做一个让低调都觉得低调的人（暗中统治了整个宇宙）</p>
+                <p>默默无闻到连上帝都以为自己才是造物主</p>
+                <p>低调到让银河系都自叹不如，让平行宇宙都甘拜下风</p>
+            </div>
+
+            <div class="profile-section">
+                <h2>兴趣爱好</h2>
+                <div class="interests-list">
+                    <span class="interest-tag">读书思考（研究平行宇宙）</span>
+                    <span class="interest-tag">自我提升（突破次元壁）</span>
+                    <span class="interest-tag">专业钻研（研究黑洞）</span>
+                    <span class="interest-tag">音乐欣赏（听银河交响曲）</span>
+                    <span class="interest-tag">生活感悟（悟透宇宙真理）</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="scroll-indicator">
+        <div class="scroll-text">继续探索更多宇宙秘密</div>
+        <div class="scroll-arrows">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <script>
+        // 监听滚动事件
+        window.addEventListener('scroll', function() {
+            const indicator = document.querySelector('.scroll-indicator');
+            if (window.scrollY > 100) {
+                indicator.classList.add('hidden');
+            } else {
+                indicator.classList.remove('hidden');
+            }
+        });
+
+        // 点击箭头滚动到下一屏
+        document.querySelector('.scroll-indicator').addEventListener('click', function() {
+            window.scrollBy({
+                top: window.innerHeight,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html> 
